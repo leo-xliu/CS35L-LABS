@@ -1,0 +1,7 @@
+#!/bin/sh
+tzcoms=$(grep '^Date:' | grep -o '[+-][0-9]*$')
+tztype=$(echo "$tzcoms" | sort -g -u)
+for tz in $tztype
+do   count=$(echo "$tzcoms" | grep -c "\\$tz")
+     echo $tz $count
+done

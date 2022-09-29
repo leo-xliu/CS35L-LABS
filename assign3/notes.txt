@@ -1,0 +1,27 @@
+Assignment 3 "tic-tac-toe" Documentation
+
+To begin the creation of this game using react, I had to first set up a local
+development environment for the react app. Make sure Node.js is installed. 
+Use "npx create-react-app my-app" to create the app and then delete all the 
+existing source files. Now create two source files index.css and index.js in 
+src/ with the provided tutorial code. Also import React and ReactDom in the 
+javascript file as well as import the css file. Then, in the tutorial file, 
+use "npm start" to view the app locally. 
+
+We are first given the barebones of the game. When the react components are
+rendered, we have a 3x3 gridbox with currently no features. The javascript 
+code is the main focus since the css is already done for us. Using react, 
+we have three react components in the form of classes:
+1. Square
+2. Board
+3. Game
+At this point, the Square class simply renders a button tag which uses a css 
+selector to take the form of a box. 
+The Board class has a method called renderSquare that takes in an argument 
+and returns a Square component. In the render method, Board displays the 
+status of whose turn it is as well as renders 9 Square components by calling 
+renderSquare 9 times in a 3x3 grid format. 
+The Game class renders a Board component. 
+
+Now, we will add react features to make the game interactable. 
+

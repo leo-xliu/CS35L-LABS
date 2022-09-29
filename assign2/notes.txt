@@ -1,0 +1,27 @@
+Assignment 2
+
+Exercise 2.1 Answers
+
+To compute (2**(521-1) * (2**521 -1)) in emacs lisp, we can use the expression:
+(* (expt 2 (- 521 1)) (- (expt 2 521) 1))
+
+To compute the previous expressions number of bits using emacs lisp, we can use:
+(+ (logb (* (expt 2 (- 521 1)) (- (expt 2 521) 1))) 1)
+This will give us the result 1041 bits. The reason it is not 1040 is because we need that additional bit to represent the number as we would be exactly 1 value off. Since the maximum number n bits can produce is (2^n)-1, the expression would be:
+n = (log(base 2) of number)+1. 
+
+For "C-h k C-h k" we are using the emacs command "describe-key" while also invoking the key-list "C-h k". Since "C-h k" displays the documentation of the invoked key-list, using "C-h k C-h k" we are asking emacs to display the documentation for the "describe-key" command. This is the equivelance of using "C-h b" and nagivagting for "C-h k" and reading its documentation there. In this case, we can specify the key-binding we want to check and instantly display its documentation from there.
+
+For "C-h k M-SPC", we are again using the "describe-key" function and then invoking the key-kist "M-SPC" to display the documentation associated with "M-SPC". It will give us a description of what the command does. This is the equivalence of using "C-h b" and finding "M-SPC" from there to read about its documentation.
+"M-SPC" is the "just-one-space" command that works by deleting all the spaces around the point but leaving exactly one space. For example, if we have the line "abc    def" and our point is between the end of c and the beginning of d, if we invoke "M-SPC" it will delete all spaces but one leaving it to be "abc def".
+"M-SPC" is implemented with a general function that does not have a key-binding and that function is "cycle-spacing".
+
+Homework: Python Scripting Shuf.py
+
+When randline.py is invoked on an empty file like /dev/null, we encounter an IndexError. The reason for this is because this script utilizes the random module which will try try to return a random line from the provided file. However, since the file is empty, there are no available lines for it to return. It becomes an indexing error because the implementation of this occurs in a list. Part of the index implementation is to multiple by the length of the list. If the length of the sequence is 0 since empty file, the index will always be 0. So when it tries to access the 0th index of the list it will raise an IndexError since the list is empty. Thus, we encounter an IndexError claiming that the list index is out of range.
+
+When the script is invoked with Python3, we will have a compilation error because of compatiblity issues. Since the script for randline.py is written with Python 2, some of the syntax will not be compatible with Python 3. So when we run it with Python3, we may get syntax errors as they are not the same for the two version. In this case, in line 65, "except IOError as (errno, strerror):" is intepreted as invalid syntax by Python3 because it has evovled sinced Python2 abnd no longer understands that syntax.
+
+Lastly, when you try to invoke the shuf.py script using Python 2 rather than Python 3, there is a compilation error because of the incompatibility of Python 2 and Python 3. Since I wrote my script using certain Python 3 features such as PEP number 636, it will not be understood in Python 2 so we are faced with syntax errors. Thus, the script will not run. 
+
+In reference to PEP 636 used in my code, although I implemented it, there were certain limitations that I faced using it so I had to shift to another solution. One unpractical aspect of PEP 636 was when the pattern contained for example "[obj1, '-e', *objs]" which would be marked for syntax error. The reason is because it cannot contain a 'obj1' if '*objs' already exists in the pattern. This made it particularly difficult to implement patterns where -n was in front of -e which means that there exists an element in between -n and -e while the end of -e must be followed by a * element. Since this is not allowed in the syntax I had to make a workaround which was to omit '-n' options from the pattern structure matching entirely and treat it as an argument for the functions I called within the case statements. However, this turned out plenty beneficial as I was able to significantly cut down on the amount of cases I had for matching.

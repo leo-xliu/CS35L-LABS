@@ -1,0 +1,26 @@
+In regards to the copyright infringement of the sentence "Even newspaper reports present contradictory information.", we can use git's features to track the history and origin of this sentence. Some commands that will be useful here will be 'git grep', 'git blame', 'git log', and 'git diff'.
+
+First, we begin by figuring out what file(s) this sentence is contained in since there are many source files in this repository. For this, we can use the command:
+git grep 'Even newspaper reports present contradictory information.' 
+This searches all files under version control in this git repository that contains this sentence. The result is the file 'northamerica'. 
+
+With this information, we can try the command:
+git blame northamerica >na.txt 
+This will then output into the file and we can use emacs to search for the sentence. 'git blame' provides us the last time the line was modified through the latest commit so here we are not getting a complete information about the sentence but it is a start. This leads us to the latest commit for this line which has the commit id abbreviation of 'c8f960ec7'. 
+
+Then we can use the command:
+git diff c8f90ec7^ northamerica 
+This tells us all the differences from this commit to the previous in the file northamerica. 
+Here we can see that Paul Eggert made a modification to the sentence pertaining to the quotations around it but did not actually introduce the sentence in this commit. Thus, the history of this sentence runs deeper and we must do more digging. 
+
+Let us try the command:
+git log -S "Even newspaper reports present contradictory information.” northamerica
+This command will actually find us the first commit in which this sentence was added into the file. After running this command, we are provided with the following results:
+commit c12b432741eed9a422fbf99fa27af6e7a941d88b
+Author: Arthur David Olson <ado@elsie>
+Date:   Thu Dec 21 11:43:42 1995 -0500
+Eggert Changes
+
+Let us then use the command:
+git diff cb12b4327^! northamerica 
+From here, we can see that the sentence was indeed first added in this commit. We can then use the context around the sentence to see that it was written by Paul Eggert on 1995-12-19 but committed by Arthur David Olson on 1995-12-21. Furthermore, in the commit message, Olson states that the changes were from Eggert, hence 'Eggert changes'. Thus, the results of our investigation is that the commit for this sentence was originally introduced by Arthur David Olson on 1995-12-21 into the file 'northamerica' but was really written by Paul Eggert on 1995-12-19. By following the context of the sentence, we see that Eggert is quoting someone named Shanks. Lastly, the newest modification for this sentence was made by Paul Eggert on 2013-09-02 in which he changes the quotes around the sentence.  

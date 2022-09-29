@@ -1,0 +1,188 @@
+﻿Assignment 1
+Lab 1.1
+1. Use Emacs to edit the file exer1.html.
+Either open it before using “emacs exer1.html” 
+Or open emacs, then dribble, and then “c-x c-f exer1.html” 
+2. Move the cursor to just after the first occurrence of the word "HTML" (all upper-case).
+“c-s HTML RET”
+3. Now move the cursor to the start of the first later occurrence of the word "scavenger".
+“c-s scavenger M-b”
+4. Now move the cursor to the start of the first later occurrence of the word "self-referential".
+Either “c-s self-referential c-M-b”
+Or “c-s self-referential M-b M-b”
+5. Now move the cursor to the start of the first later occurrence of the word "arrow".
+“c-s arrow M-b”
+6. Now move the cursor to the end of the current line.
+“c-e”
+7. Now move the cursor to the beginning of the current line.
+“c-a”
+8. Doing the above tasks with the arrow keys takes many keystrokes, or it involves holding down keys for a long time. Can you think of a way to do it with fewer keystrokes by using some of the commands available in Emacs?
+9. Did you move the cursor using the arrow keys? If so, repeat the above steps, without using the arrow keys.
+10. When you are done, exit Emacs.
+“c-x c-c”
+
+
+
+
+Lab 1.2
+1. Use Emacs to edit the file exer2.html. The idea is to delete its HTML comments; the resulting page should display the same text as the original.
+After entering emacs, open dribble file and then “c-x c-f exer2.html”
+2. Delete the 69th line, which is an HTML comment. <!-- HTML comments look like this, but the comment you delete has different text inside. –>
+        “c-u 69 c-a c-k” goes to the beginning of the 69th line and then deletes it
+3. Delete the HTML comment containing the text "DELETE-ME DELETE-ME DELETE-ME".
+“c-s DEL c-a c-k” 
+4. Delete the HTML comment containing the text "https://en.wikipedia.org/wiki/HTML_comment#Comments".
+        “c-s <! C-a c-@ c-u 3 c-e c-w”
+5. There are two more HTML comments; delete them too.
+        “c-s <! c-a c-@ c-u 4 c-e c-w c-s <! c-a c-k”
+Once again, try to accomplish the tasks using a small number of keystrokes. When you are done, save the file and exit back to the command line. You can check your work by using a browser to view exer2.html. Also, check that you haven't deleted something that you want to keep, by using the following command:
+“c-x c-s c-x c-c”
+Or 
+“c-x c-c” and save file from its prompt
+
+
+
+
+
+
+
+
+
+
+
+
+Lab 1.3
+1. Use Emacs to edit the file exer3.html.
+After entering emacs, open dribble file and then “c-x c-f exer3.html”
+2. Change the first two instances of "Assignment 1" to "Assignment 27".
+“M-% Assignment 1 ret Assignment 27 ret spc .”
+3. Change the first instance of "UTF-8" to "US-ASCII".
+“M-< M-% UTF-8 ret US-ASCII ret .”
+4. Ooops! The file is not ASCII so you need to fix that. Most of its non-ASCII characters are the Unicode character “’” (RIGHT SINGLE QUOTATION MARK U+2019); fix these by replacing each one with an ASCII “'” (U+0027 APOSTROPHE); for example, you can use M-x replace-string to do this systematically. Remove every line that contains a non-ASCII character other than U+2019. You can find the next non-ASCII character by searching for the regular expression "[^[:ascii:]]".
+“M-x replace-string ret ’ ret ‘ ret”
+“M-< c-M-s [^[:ascii:]] c-a c-k” 
+“c-M-s [^[:ascii:]] c-a c-k” 
+        Delete line = delete the newline too?
+5. Insert an empty line after the first line containing "</ol>".
+        “M-< c-s </ol> c-m” 
+When you finish, save the text file and exit Emacs. As before, use the diff command to check your work.
+“c-x c-s c-x c-c”
+Or 
+“c-x c-c” and save file from its prompt
+
+
+
+
+
+
+Lab 1.4
+1. Execute the command "cat exer2.html exer2.diff >exer4.html" to create a file exer4.html that contains a copy of exer2.html followed by a copy of exer2.diff.
+Done
+2. Use Emacs to edit the file exer4.html. The idea is to edit the file so that it looks identical to exer1.html on a browser, but the file itself is a little bit different internally.
+“M-x open-dribble-file lab4.drib”
+“C-x c-f exer4.html”
+3. Go to the end of the file. Copy the new lines in the last chunk of diff output, and paste them into the correct location earlier in the file.
+“M-> c-r < c-@ c-e m-w c-u 9 c-p c-@ c-u 3 c-p c-a c-f m-w c-u 10 c-p c-e c-@ M-{ c-f m-w c-u 9 c-p c-@ c-e m-w c-u 9 c-p c-e c-@ M-{ c-f m-w” 
+copied everything into kill ring that we want to paste later
+Order of kill ring: 
+506 paste last
+485
+458
+82
+69 paste first
+4. Repeat the process, until the earlier part of the file is identical to what was in the original.
+“M-< c-u 69 c-a c-y M-< c-u 82 c-a c-y M-y M-< c-u 458 c-a c-y M-y 
+M-< c-u 485 c-a c-y M-y 
+M-< c-u 506 c-a c-y M-y”
+5. Delete the last part of the file, which contains the diff output.
+“C-f c-@ M-> c-w”
+6. … except we didn't really want to do that, so undo the deletion.
+“c-_”
+7. Turn the diff output into a comment, by surrounding it with "<!--" and "-->". If the diff output itself contains end-comment markers "-->", escape them by replacing each such "-->" with "--&gt;".
+“C-x c-x M-x replace-string ret --> ret --&gt; ret”
+“C-p <!-- M-> -->”
+8. Now let's try some search and replaces. Search the text document for the pattern "<ol>". How many instances did you find? Use the search and replace function to replace them all with the final-caps equivalent "<oL>".
+        “C-s <o/> c-s c-s c-s c-s c-s c-s M-<”
+        “M-x replace-string ret <ol> ret <oL> ret”
+9. Check your work with viewing exer4.html with an HTML browser, and by running the shell command "diff -u exer1.html exer4.html >exer4.diff". The only differences should be changes from "<ol>" to "<oL>", and a long HTML comment at the end.
+        “C-x c-s c-x c-c”
+
+
+Lab 1.5
+1. To find the location of the following commands, the whereis command can be used. This commands prints the command file location for the file being specified. So, for sh, sleep, and export, I used the command “whereis sh sleep export” which will print the location of all three commands. The sh command is located in /usr/bin/sh. The sleep command is located in /usr/bin/sleep. For the export command, it did not contain a location so I used another command “type export” to tell me what the export command is. From this, I found that export is a shell built-in. 
+2. First, to find all files in /usr/bin that are exactly two characters long and end with a ‘u’, I piped the ls command to grep which will search for the regular expression pattern I give it. The command is “ls /usr/bin | grep ^.u$”. This prints all matching patterns which give the result ‘du’ and ‘su’. To find out if these are executable commands and what they did, I used the commands “man du” and “man su”. Su is an executable command that allows users to execute commands as a substitute user and group ID. Du is an executable command that estimates file space usage. 
+3. We can find out what file the symbolic link is referring to using the “ls -l” command which will print the metadata including where the link is pointing to. So, I ran the command “ls -l /usr/local/cs/bin/emacs” which showed that the file that is actually being executed is “emacs-27.2”.
+4. To check the version number of the /usr/bin/gcc program, I used the command “/usr/bin/gcc --version”. For plain gcc, I used “gcc --version”. For /usr/bin/gcc, the version number is 8.5.0 and for plan gcc, the version number is 11.2.0. They are different programs because they do not refer to the same gcc. For /usr/bin/gcc, it follows an absolute path starting from the root directory and goes /usr/bin. On the other hand, the plain gcc points to another program. We can verify this by using the command “which gcc” that prints the path the plain gcc is pointing to. From this I get, “/usr/local/cs/bin/gcc” which clearly shows they refer to different programs. They are different programs because we are working in another path compared to /usr/bin/gcc since we prepended /usr/local/cs/bin to our path. So the plain gcc would refer to the latter one. 
+5. To find the answer for this question, we can use the command “man chmod” which will give us a manual on the chmod command. In symbolic mode, we need to specify the who, the operator, and the permission. In this case, “u+sx” refers to the user (owner) and it is adding permission for them. The ‘s’ will set user ID on execution and the ‘x’ will add execution permission. On the other hand, “o-w” refers to others (those that are neither the owner or in the group) and is removing writing permission. 
+6. First, I used the command “man find” to read about how to use find and the appropriate tests to run with the command to get the specific results. To perform the find command, I used “find /usr/local/cs -type d -mtime 28”. The test “-type” lets me specify find to look for directories and “-mtime” to specify the number of days which is 28 for 4 weeks. Running this command, no directories show up meaning none of them have been modified in the last 4 weeks. 
+7. First, I used “whereis find” to print the same directory as the command find. This tells me that find is located in /usr/bin. Taking this information, I can run the command “find /usr/bin -maxdepth 1 -type l -printf l | wc -m” to print out the total number of symbolic links located in that directory. Maxdepth 1 tells us to only look inside that directory and not the subdirectories. Type l refers to symbolic links and printf l will print ‘l’ everytime it finds a symbolic link. Then piping this with the wc -m command, the number of symbolic links, which each occurrence shows up as a character ‘l’, will be printed. The answer I got is 319 symbolic links.
+8. I first used “man ls” to look up options for ls that will simplify my search. Then I used the command “ls -alt /usr/lib64 | grep ‘^-’”. Here I am using the options -alt which will not exclude file names starting with ‘.’ and will print in a long format sorted by last modified date. The output will be piped to grep and will filter to look only for regular files. The oldest regular file here is ‘libbz2.so.1.0.6’.
+9. To check what commands have transpose in their name, first go on emacs using command “emacs” and then use command “c-h a” which will allow the user to search for commands. Then, type “transpose” followed by RET to get a list of all commands with transpose in the name. The commands in emacs with transpose in their name are transpose-chars, transpose-lines, transpose-paragraphs, transpose-regions, transpose-sentences, transpose-sexps, and transpose-words.
+10. Emacs yank is the equivalent of paste. It will paste from a queue called the kill ring that contains previous kills in order of most recent. To invoke a yank, you can use the keystroke “c-y” and if you want to yank previous kills from the kill ring you can use “M-y” to cycle through the yanks after doing the first “c-y”. 
+11. In order to examine the difference between the two options, I used the command “ls -l /usr/bin” for the first part. And then in Emacs, I used “M-x dired” then typed the path “/usr/bin” to view the Emacs version. The difference in the output is that the “ls -l” version will print out the entire directory and place your shell window at the bottom of the list. On the other hand, when opening the directory with Emacs, it places you at the start of the list which you can then navigate to the bottom using commands such as “c-v” or “M->”. Furthermore, in Emacs dired, I am able to edit the directory whereas I cannot with “ls -l” which only prints the long list for the directory. 
+12. Instead of using the ps command to show the login shell’s process and all the process’s ancestors and descendants, we can use the pstree command to make it simpler to understand the hierarchy. Using the command “pstree -p -s $$”, this will create a process tree that only outputs for this login shell’s process. From this, we get the login shell process which is bash and 4 ancestor processes which 3 are sshd and 1 is systemd. Then there is 1 descendant process which is the pstree process that was created when the command was ran. 
+
+
+
+
+Lab 1.6
+1. Create a new directory named "junk" that's right under your home directory.
+Use “M-x dired ret” to open the home directory using Emacs. 
+To create a directory either use “M-x make-directory RET directory/path RET” or “+ RET directory/path RET”
+2. In that directory, create a C source file hello.c that contains the following text. Take care to get the text exactly right, with no trailing spaces or empty lines, with the initial # in the leftmost column of the first line, and with all other lines indented to match exactly as shown:
+To create a new file, just c-x c-f (opens a file) and name the file 
+        “C-x c-f ~/junk/hello.c”
+        The C file definitions: 
+        for(;;) -infinite loop
+        int c = getchar(); -get a character from stdin
+        ferror(FILE *stream) -tests if the stream produces an error indicator. If the error indicator is set then it will return a non-zero value. If not, then zero is produced. 
+        perror -prints to stderr the message 
+        fprintf -prints to the specified file stream a message 
+        fprintf(stderr, “message”) will print the message to stderr
+        putchar(c) -writes char into standard output 
+        fclose(file *stream) closes the file stream and returns 0 if successful , EOF if not.
+        What the program is doing: 
+The program will read in from standard input a file and through each iteration it will examine a character. It first checks if the character is an ascii character. If it is not, then it will print to stderr the message “stdin”. If it is not an error but rather the end of the file it will print to stderr “EOF in input\n” and return 1 (indicating the error return). If it was an error, it will move on to the next if statement and performs some more file stream tasks such as outputting to stdout and such. The program will successfully return on a new line. 
+3. Compile this file, using the Emacs M-x compile command.
+“M-x compile [delete default compile command “make -k”] gcc ./hello.c -o hello” 
+4. Run the compiled program from Emacs using the M-! command, and put the program's standard output into a file named hello-a1 and its standard error into a file hello-a2.
+This part of the assignment focuses on the idea of redirection.
+“M-! ./hello 1>hello-a1 2>hello-a2”
+5. Same as before, except run the program with standard input being closed, and put the program's standard output and error into hello-b1 and hello-b2, respectively. Here, “closed” does not mean the standard input is an empty file; it means that standard input is not open at all, to any file.
+“M-! ./hello <&- 1>hello-b1 2>hello-b2” 
+6. Same as before, except run the program with standard input being the file /etc/passwd, and put the program's standard output and error into hello-c1 and hello-c2.
+“M-! ./hello </etc/passwd 1>hello-c1 2>hello-c2”
+7. Same as before, except run the program with standard input being the file /etc/passwd and standard output being the file /dev/full, and put the program's standard error into hello-d2.
+“M-! ./hello </etc/passwd 1>/dev/full 2>hello-d2”
+
+
+
+
+Homework Sorting 
+To sort, 
+“sort -o /usr/share/dict/linux.words ~/35l/assign1/sorted.words”
+Tr- translate, squeeze, and/or delete characters from standard input and put it to standard output
+-c use the complement of set1 
+-s (squeeze repeats) replace all occurrences of repeats for the character in set2 with exactly one occurrence of that character
+Since we do not have the -d option, we are not deleting here. 
+
+
+tr -c 'A-Za-z' '[\n*]'          Anything that is not A-Z or a-z, replace it with a new space. 
+tr -cs 'A-Za-z' '[\n*]'        Anything that is not A-Z or a-z, replace and truncate to exactly 1 new space. This means for even super long replacements, it becomes only 1 space.
+Note: replacements that occur at the end of a line will essentially do nothing since there was already a whitespace to be replaced by whitespace and so it will truncate down to the same whitespace. 
+This will essentially turn the html text of the website into a list of ‘words’ each separately by a new line. 
+tr -cs 'A-Za-z' '[\n*]' | sort      Will sort the list of new ‘words’
+tr -cs 'A-Za-z' '[\n*]' | sort -u       Will sort the list of new ‘words’ and remove duplicates (will only        print the first run)
+Comm -compares two sorted files line by line
+“Comm - File_2” means read File_1 from standard input
+comm with no options will produce 3 columns of results. First column is words unique to file_1; second column is words unique to file_2; third column is words common to both
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm - sorted.words
+The new sorted list from before will be piped as standard input for comm and will be compared with sorted.words; all 3 columns will be displayed. 
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - sorted.words
+Same as before but now will suppress columns 2 and 3 so only shows words unique to standard input which is the list of sorted words created using the html website text. 
+Since we are comparing it to sorted.words which is considered the entire dictionary, it will only output words that are incorrect. 
+
+
+&, ‘, - .
+-!&.,/'\
+0-9
